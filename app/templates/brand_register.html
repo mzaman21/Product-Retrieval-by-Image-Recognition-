@@ -12,30 +12,30 @@
       <img src="{%static 'brand_register.png' %}" width="200" height="200">
     <h1>Welcome! Register Your Brand</h1>
     <p>Register your brand on our store to list your products on our store and make your brand available to more online users</p>
-    <form class="row g-3">
+    <form class="row g-3" action="/brand_register/" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <div class="col-md-0">
         <label for="brandname" class="form-label">Brand Name</label>
-        <input type="text" class="form-control" id="brandname">
+        <input type="text" class="form-control" id="brandname" name="Brand_Name">
       </div>
       <div class="col-md-6">
         <label for="brandemail" class="form-label">Email</label>
-        <input type="email" class="form-control" id="brandemail">
+        <input type="email" class="form-control" id="brandemail" name="Brand_Email">
       </div>
       <div class="col-md-6">
         <label for="loginpassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="loginpassword">
+        <input type="text" class="form-control" id="loginpassword" name="Brand_Password">
       </div>
       <div class="col-12">
         <label for="inputAddress" class="form-label">Address</label>
-        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="Brand_Address">
       </div>
       <div class="col-md-6">
         <label for="inputCity" class="form-label">City</label>
-        <input type="text" class="form-control" id="inputCity">
+        <input type="text" class="form-control" id="inputCity" name="Brand_City">
       </div>
       <div class="col-md-4">
         <label for="inputState" class="form-label">State</label>
-        <select id="inputState" class="form-select">
+        <select id="inputState" class="form-select" name="Brand_State">
           <option selected>Punjab</option>
           <option>Sindh</option>
           <option>Khyber Pakhtunkhwa</option>
@@ -45,11 +45,11 @@
       </div>
       <div class="col-md-2">
         <label for="inputZip" class="form-label">Zip</label>
-        <input type="text" class="form-control" id="inputZip">
+        <input type="text" class="form-control" id="inputZip" name="Brand_Zip">
       </div>
       <div class="mb-3">
           <label for="brand_logo" class="form-label">Brand Logo</label>
-          <input class="form-control" type="file" id="brand_logo">
+          <input class="form-control" type="file" id="brand_logo" name="Brands_Logo">
       </div>
       <div class="col-12">
         <button type="submit" class="btn btn-primary">Sign in</button>

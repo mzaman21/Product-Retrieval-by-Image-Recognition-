@@ -10,19 +10,19 @@
   <div class="container-md">
     <h1>Welcome Back!</h1>
     <p>Login to your store and manage your products and orders form customer</p>
-   <form>
+   <form action="/brand_login/" method="post"> {% csrf_token %}
       <div class="mb-3">
         <label for="brand_email" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="brand_email" >
+        <input type="email" class="form-control" id="brand_email" name="brand_email" >
       </div>
       <div class="mb-3">
         <label for="brand_password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="brand_password">
+        <input type="text" class="form-control" id="brand_password" name="brand_password">
       </div>
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="brand_remember">
-        <label class="form-check-label" for="brand_remember">Remember me</label>
-      </div>
+{#      <div class="mb-3 form-check">#}
+{#        <input type="checkbox" class="form-check-input" id="brand_remember">#}
+{#        <label class="form-check-label" for="brand_remember">Remember me</label>#}
+{#      </div>#}
       <button type="submit" class="btn btn-primary">Login</button>
     </form>
   </div>
