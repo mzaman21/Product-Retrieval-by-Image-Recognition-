@@ -38,7 +38,7 @@ def userSignUp(request):
             messages.error(request, "Passwords didn't matched!!")
             return redirect('uhome')
 
-        if not username.isalnum():
+        if not uname.isalnum():
             messages.error(request, "Username must be Alpha-Numeric!!")
             return redirect('uhome')
 
@@ -49,7 +49,6 @@ def userSignUp(request):
 
         return redirect('ulogin')
     else:
-        messages.error(request,"Please fill the form correctly!!")
         return render(request, 'userSignUp.html')
 
 def userLogin(request):
@@ -69,7 +68,6 @@ def userLogin(request):
             return redirect('uhome')
 
     else:
-        messages.error(request,"Please fill the form correctly!!")
         return render(request,"userLogin.html")
 
 def uSingOut(request):
