@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+
+ <h3>Login Here</h3>
+    <form method="post" action="{% url 'ulogin' %}">
+
+        {% csrf_token %}
+        <label for="username">Username</label>
+        <input type="text" placeholder="Enter Username" id="username" name="username">
+        <br>
+        <label for="password">Password</label>
+        <input type="password" placeholder="Password" id="password" name="pass">
+        <br>
+        <button type="submit">Log In</button><br>
+
+        <a href="{% url 'usignup' %}" >Create a account</a>
+    </form>
+</body>
+</html>
