@@ -41,3 +41,7 @@ def brand_login(request):
 
 def brand_dashboard(request):
     return render (request,"brand_dashboard.html")
+
+def prduct_add(request):
+
+    return render(request,"product_add.html")
