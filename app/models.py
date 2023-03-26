@@ -21,7 +21,7 @@ class Product(models.Model):
     Product_Price = models.CharField(max_length=20)
     Product_Category = models.CharField(max_length=20)
     Product_Description = models.TextField(max_length=50)
-    Product_Thumbnail = models.ImageField(blank=True)
+    Product_Stock = models.IntegerField(default=0)
     Product_Brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
 
     def __str__(self):

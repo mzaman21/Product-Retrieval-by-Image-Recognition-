@@ -12,7 +12,7 @@
       <img src="{%static 'brand_register.png' %}" width="200" height="200">
     <h1>Add New Product</h1>
     <p>Add new product to your store</p>
-    <form class="row g-3" action="/prduct_add/" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <form class="row g-3" action="/product_add/" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <div class="col-md-0">
         <label for="productname" class="form-label">Product Name</label>
         <input type="text" class="form-control" id="productname" name="Product_Name">
@@ -31,8 +31,12 @@
         </select>
       </div>
       <div class="col-12">
-       <label for="prodcutdescription" class="form-label">Product Description</label>
-       <textarea class="form-control" id="prodcutdescription"  name="Product_Description"  rows="3"></textarea>
+       <label for="productdescription" class="form-label">Product Description</label>
+       <textarea class="form-control" id="productdescription"  name="Product_Description"  rows="3"></textarea>
+      </div>
+      <div class="col-12">
+       <label for="productstock" class="form-label">Product Stock</label>
+       <input type="number" class="form-control" id="productprice" name="Product_Stock">
       </div>
       <div class="mb-3">
           <label for="productimage" class="form-label">Product Image</label>
