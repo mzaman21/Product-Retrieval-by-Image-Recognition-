@@ -1,10 +1,11 @@
+import json
 from django.shortcuts import render,redirect
 from .models import Brand,Product,PImage
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from .forms import BrandForm
-from django.contrib.auth import login, authenticate
 from django.contrib import  messages
+from django.core import serializers
 def Index(request):
 
     params={'name':'zaman','place':'Lahore'}
@@ -36,26 +37,24 @@ def brand_login(request):
            response.set_cookie('Brand_ID',BrandId)
            return response
         else:
-            print("fail")
+
             messages.error(request,"Brand Credentials")
             return render(request, 'brand_login.html')
-    print("all fail")
+
     return render(request,'brand_login.html')
 
 def brand_dashboard(request):
 
     BrandId = request.COOKIES['Brand_ID']
     brands = Brand.objects.filter(id=BrandId)
-    print(brands)
+
     for brand in brands:
         CBrand = Brand(Brand_Name=brand.Brand_Name, Brand_Email=brand.Brand_Email, Brand_Password=brand.Brand_Password,
                        Brand_Address=brand.Brand_Address, Brand_City=brand.Brand_City, Brand_State=brand.Brand_State,
                        Brand_Zip=brand.Brand_Zip, Brands_Logo=brand.Brands_Logo)
 
-    print(CBrand.Brand_State)
+
     Brand_Products = Product.objects.filter(Product_Brand__Brand_Name__contains=CBrand.Brand_Name)
-    print(CBrand)
-    print(Brand_Products)
     context = {
         'BProducts': Brand_Products
     }
@@ -79,3 +78,32 @@ def product_add(request):
         return redirect('brand_dashboard')
 
     return render(request,"product_add.html")
+
+
+def product_delete(request):
+    print("in delete")
+    if request.method=='POST':
+       data=json.load(request)
+       Pid=data.get('product_id')
+       print(Pid)
+       product_tobe_deleted = Product.objects.filter(id=Pid)
+       print(product_tobe_deleted)
+       product_tobe_deleted.delete()
+
+       return JsonResponse({'status':'Product Deleted'})
+    return JsonResponse({'status':"Product Not Deleted"})
+
+def product_to_update(request):
+    if request.method=='POST':
+        data = json.load(request)
+        Pid = data.get('product_id')
+        print(Pid)
+        # product_tobe_update = Product.objects.filter(id=Pid)
+        # print(product_tobe_update)
+        # for product in product_tobe_update:
+        #  PUpdate = Product(Product_Name=product.Product_Name,Product_Price=product.Product_Price,Product_Category=product.Product_Category,Product_Description=product.Product_Description,Product_Stock=product.Product_Stock,Product_Brand=product.Product_Brand)
+        # print(PUpdate)
+        data = serializers.serialize("json",Product.objects.filter(id=Pid))
+        print(data)
+        return JsonResponse({'PUpdate':data})
+    return JsonResponse({'status':'Product to be update is not available'})

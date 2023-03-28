@@ -1,41 +1,179 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register Brand</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-  </head>
-  <body>
-  <div class="container-md">
-    <h1>Welcome Back! To Brand Dashboard</h1>
-    <p>You can view your recent products and your orders here </p>
-    <a href="/product_add/">Add Product</a>
-     <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Category</th>
-          <th scope="col">Price</th>
-          <th scope="col">Stock</th>
-          <th scope="col">Action</th>
+{% extends 'base.html' %}
+{% block title %}Brand Dashboard{% endblock title %}
+{% block main_content %}
+    <div class="container-md">
+        <h1>Welcome Back! To Brand Dashboard</h1>
+        <p>You can view your recent products and your orders here </p>
+        <a href="/product_add/">Add Product</a>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deletemodal">
+            Launch demo modal
+        </button>
+         <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Price</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for product in BProducts %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ product.Product_Name }}</td>
+              <td>{{ product.Product_Category }}</td>
+              <td>{{ product.Product_Price }}</td>
+              <td>{{ product.Product_Stock }}</td>
+              <td>
+                  <button type="button"class="edit" value="{{ product.id }}"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></button>
+                  <button type="button" class="delete" value="{{ product.id }}"><i class="material-icons" data-toggle="tooltip" title="Delete" >&#xE872;</i></button>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+    </div>
 
-        </tr>
-      </thead>
-      <tbody>
-      {% for product in BProducts %}
-        <tr>
-          <th scope="row">{{ forloop.counter }}</th>
-          <td>{{ product.Product_Name }}</td>
-          <td>{{ product.Product_Category }}</td>
-          <td>{{ product.Product_Price }}</td>
-          <td>{{ product.Product_Stock }}</td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-  </body>
-</html>
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form class="row g-3" action="/product_update/" method="POST"  enctype="multipart/form-data">{% csrf_token %}
+                <div class="col-md-0">
+                <label for="productname" class="form-label">Product Name</label>
+                <input type="text" class="form-control" id="productname" name="Product_Name">
+              </div>
+              <div class="col-md-6">
+                <label for="productprice" class="form-label">Price</label>
+                <input type="text" class="form-control" id="productprice" name="Product_Price">
+              </div>
+              <div class="col-md-6">
+                <label for="productcategory" class="form-label">Category</label>
+                <select id="productcategory" class="form-select" name="Product_Category">
+                  <option selected>Men Shirts</option>
+                  <option>Men Kurtas</option>
+                  <option>Women Kurtis</option>
+                  <option>Women Suits</option>
+                </select>
+              </div>
+              <div class="col-12">
+               <label for="productdescription" class="form-label">Product Description</label>
+               <textarea class="form-control" id="productdescription"  name="Product_Description"  rows="3"></textarea>
+              </div>
+              <div class="col-12">
+               <label for="productstock" class="form-label">Product Stock</label>
+               <input type="number" class="form-control" id="productprice" name="Product_Stock">
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary modaldelete">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deletemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete this product?</p>
+            <p class="text-warning"><small>This action cannot be undone.</small></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary modaldelete">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock main_content %}
+{% block myscripts %}
+    <script>
+
+        $(document).ready(function (){
+            function getCookie(name) {
+              let cookieValue = null;
+              if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                  const cookie = cookies[i].trim();
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                  }
+                }
+              }
+              return cookieValue;
+            }
+            $(document).on('click','.edit',function (){
+                var product_id = $(this).val();
+                console.log(product_id);
+                {#$('#editmodal').modal('show');#}
+                 $.ajax({
+                        type: 'POST',
+                        url: "/product_to_update/",
+                        dataType: "json",
+                        data: JSON.stringify({product_id: product_id,}),
+                         headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "X-CSRFToken": getCookie("csrftoken"),
+                         },
+                        success:(response)=> {
+                            console.log(response)
+                            var p = JSON.parse(response.PUpdate);
+                            console.log(p)
+                            console.log(p[0].fields.Product_Name);
+                        }
+
+                 });
+            });
+            $(document).on('click','.delete',function (){
+                var product_id = $(this).val();
+                console.log(product_id);
+                $('#deletemodal').modal('show');
+
+                $(document).on('click','.modaldelete',function () {
+                    console.log('in delete');
+                    $.ajax({
+                        type: 'POST',
+                        url: "/product_delete/",
+                        dataType: "json",
+                        data: JSON.stringify({product_id: product_id,}),
+                         headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "X-CSRFToken": getCookie("csrftoken"),
+                         },
+                        success:(response)=> {
+                            location.reload();
+                        }
+
+                    });
+                });
+            });
+
+        });
+
+
+    </script>
+
+
+{% endblock myscripts %}
