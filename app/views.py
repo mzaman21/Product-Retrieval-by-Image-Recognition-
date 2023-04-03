@@ -10,15 +10,9 @@ from math import ceil
 
 def Index(request):
     products = Product.objects.all()                #retrive all products
-
-    product_images = {}
-    for product in products:
-        images = PImage.objects.filter(Product=product)
-        product_images[product.id] = images
-
     n=len(products)
     nslides = n//4 + ceil((n/4)-(n//4))
-    params={'no_of_slides':nslides, 'range':range(1, nslides), 'product':products, 'product_images': product_images}
+    params={'no_of_slides':nslides, 'range':range(1, nslides), 'product':products}
     return render(request, 'index.html',params)
 
 def brand_register(request):
