@@ -105,5 +105,20 @@ def product_to_update(request):
         # print(PUpdate)
         data = serializers.serialize("json",Product.objects.filter(id=Pid))
         print(data)
-        return JsonResponse({'PUpdate':data})
+        return JsonResponse({'PUpdate':data,"Productid":Pid})
     return JsonResponse({'status':'Product to be update is not available'})
+
+def product_update(request):
+    if request.method=='POST':
+        Pid = request.POST.get("Prid")
+        Product_name = request.POST.get("Product_Name")
+        Product_price = request.POST.get("Product_Price")
+        Product_category = request.POST.get("Product_Category")
+        Product_description = request.POST.get("Product_Description")
+        Product_stock = request.POST.get("Product_Stock")
+        print("in update")
+        print(Pid)
+
+        Product.objects.filter(id=Pid).update(Product_Name=Product_name,Product_Price=Product_price,Product_Category=Product_category,Product_Description=Product_description
+                                              ,Product_Stock=Product_stock)
+    return  redirect('brand_dashboard')

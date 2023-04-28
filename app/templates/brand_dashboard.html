@@ -48,6 +48,10 @@
           </div>
           <div class="modal-body">
             <form class="row g-3" action="/product_update/" method="POST"  enctype="multipart/form-data">{% csrf_token %}
+              <div class="col-md-0">
+                <label for="productid" class="form-label">Product ID</label>
+                <input type="text" class="form-control" id="productid" name="Prid" readonly>
+              </div>
                 <div class="col-md-0">
                 <label for="productname" class="form-label">Product Name</label>
                 <input type="text" class="form-control" id="productname" name="Product_Name">
@@ -71,7 +75,7 @@
               </div>
               <div class="col-12">
                <label for="productstock" class="form-label">Product Stock</label>
-               <input type="number" class="form-control" id="productprice" name="Product_Stock">
+               <input type="number" class="form-control" id="productstock" name="Product_Stock">
               </div>
               <div class="col-12">
                 <button type="submit" class="btn btn-primary">Update</button>
@@ -80,7 +84,6 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary modaldelete">Delete</button>
           </div>
         </div>
       </div>
@@ -140,8 +143,18 @@
                         success:(response)=> {
                             console.log(response)
                             var p = JSON.parse(response.PUpdate);
-                            console.log(p)
+                            var proid = JSON.parse(response.Productid);
+                            console.log(p);
+                            console.log(proid);
                             console.log(p[0].fields.Product_Name);
+
+                            document.getElementById("productid").value = proid;
+                            document.getElementById("productname").value = p[0].fields.Product_Name;
+                            document.getElementById("productprice").value = p[0].fields.Product_Price;
+                            document.getElementById("productcategory").value = p[0].fields.Product_Category;
+                            document.getElementById("productdescription").value = p[0].fields.Product_Description;
+                            document.getElementById("productstock").value = p[0].fields.Product_Stock;
+                            $('#editmodal').modal('show');
                         }
 
                  });
