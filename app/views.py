@@ -1,5 +1,8 @@
 import json
 from django.shortcuts import render,redirect
+
+from PRIR.settings import CART_SESSION_ID
+from .cart import Cart,SProduct
 from .models import Brand,Product,PImage
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -149,3 +152,45 @@ def get_single_product(request,slug):
     context = {'product': product, 'FeaturedImage': FImage, 'images': productsImages}
 
     return render(request, 'single_product.html', context=context)
+
+def add_to_cart(request):
+    if request.method=='POST':
+        print("in add to cart")
+        cart = Cart(request)
+        pid = request.POST.get('productid')
+        pquantity = request.POST.get('quantity')
+        product = Product.objects.filter(id=pid)
+        for p in product:
+            Pslug = p.slug
+            Prid = p.id
+
+        cart.add(product_id=Prid, quantity=pquantity, update_quantity=False)
+        messages.success(request, "The product was added to the cart.")
+
+        return redirect("cart_detials")
+
+    return render(request,"index.html")
+
+def cart_detials(request):
+
+    product_in_cart_session = request.session[CART_SESSION_ID]
+    print("In Session")
+    print(product_in_cart_session)
+    cart_products=[]
+    productImages={}
+    for pid in product_in_cart_session:
+        product = Product.objects.filter(id=pid)
+        p_quantity_cart=product_in_cart_session[pid]['quantity']
+        for p in product:
+            make_product = SProduct(Product_id=p.id,Product_Name=p.Product_Name,Product_Price=p.Product_Price,
+                            Product_Category=p.Product_Category,Product_Description=p.Product_Description,Product_Stock=p.Product_Stock,slug=p.slug,Quantity=p_quantity_cart)
+
+            ProductImage = PImage.objects.filter(Product=p).values().first()
+            productImages[p.id] = ProductImage
+            cart_products.append(make_product)
+
+    context ={
+        "cart_products":cart_products,
+        "PImage":productImages
+    }
+    return render(request,"cart_details.html",context)

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Brand Dashboard{% endblock title %}
+{% block main_content %}
+    <div class="container-md">
+        <h1>This is single Product View</h1>
+        <p>Add to cart and continue shopping or go to checkout </p>
+        <h1 class="title">Cart</h1>
+
+    {% if cart_products %}
+
+        <div class="box mb-6">
+            <div class="table">
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in cart_products %}
+
+                            <tr>
+                                <td>
+                                    <figure class="image is-64x64">
+                                        <img src="/media/{{PImage|get_item:item.Product_id}}" alt="{{item.Product_Name}}" width="70" height="70">
+                                    </figure>
+                                </td>
+                                <td>
+                                    <a href="{% url 'get_single_product' item.slug %}">{{item.Product_Name}}</a>
+                                </td>
+                                <td>
+                                    {{item.Quantity}}
+
+                                    <a href="?change_quantity={{ item.Product_id }}&quantity=-1">-</a>
+                                    <a href="?change_quantity={{ item.Product_id }}&quantity=1">+</a>
+
+                                </td>
+
+                                <td>${{ item.Product_Price }}</td>
+{#                                <td>#}
+{#                                    <a href="?remove_from_cart={{item.id}}" class="delete">Remove</a>#}
+{#                                </td>#}
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td><strong>Total Cost</strong> </td>
+{#                            <td><strong>{{ cart|length }}</strong> </td>#}
+{#                            <td colspan="2">${{cart.get_total_cost}}</td>#}
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock main_content %}
+{% block myscripts %}
+
+
+
+{% endblock myscripts %}

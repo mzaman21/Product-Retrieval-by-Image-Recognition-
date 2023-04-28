@@ -26,6 +26,22 @@
     </dl>
     <a href="#" class="btn  btn-outline-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a>
     </div>
+    <form method="post" action="/add_to_cart/">
+        {% csrf_token %}
+
+        <div class="field has-addons">
+            <div class="control">
+                <input type="number" name="productid" value="{{ product.id }}" hidden>
+            </div>
+            <div class="control">
+                <input type="number" name="quantity" value="1" class="input" min="1" id="">
+            </div>
+
+            <div class="control">
+                <button class="btn  btn-outline-primary">Add to Cart</button>
+            </div>
+        </div>
+    </form>
 
 {% endblock main_content %}
 {% block myscripts %}
