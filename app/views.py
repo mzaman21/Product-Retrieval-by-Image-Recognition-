@@ -6,9 +6,13 @@ from django.shortcuts import render
 from .forms import BrandForm
 from django.contrib import  messages
 from django.core import serializers
-def Index(request):
+from math import ceil
 
-    params={'name':'zaman','place':'Lahore'}
+def Index(request):
+    products = Product.objects.all()                #retrive all products
+    n=len(products)
+    nslides = n//4 + ceil((n/4)-(n//4))
+    params={'no_of_slides':nslides, 'range':range(1, nslides), 'product':products}
     return render(request, 'index.html',params)
 
 def brand_register(request):
