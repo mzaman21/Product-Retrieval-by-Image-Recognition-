@@ -1,6 +1,9 @@
 from django.db import models
 
 # Create your models here.
+from django.utils.text import slugify
+
+
 class Brand(models.Model):
     Brand_id = models.AutoField
     Brand_Name = models.CharField(max_length=20)
@@ -22,8 +25,12 @@ class Product(models.Model):
     Product_Category = models.CharField(max_length=20)
     Product_Description = models.TextField(max_length=50)
     Product_Stock = models.IntegerField(default=0)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     Product_Brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
 
+    def save(self , *args , **kwargs):
+        self.slug = slugify(self.Product_Name)
+        super(Product ,self).save(*args , **kwargs)
     def __str__(self):
         return self.Product_Name
 

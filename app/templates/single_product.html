@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Brand Dashboard{% endblock title %}
+{% block main_content %}
+    <div class="container-md">
+        <h1>This is single Product View</h1>
+        <p>Add to cart and continue shopping or go to checkout </p>
+    <div class="img-big-wrap">
+      <div> <a href="#"><img src="/media/{{FeaturedImage.Product_Image}}" width="300" height="300"></a></div>
+    </div> <!-- slider-product.// -->
+    <div class="thumbs-wrap">
+      {% for image in images %}
+      <a href="#" class="item-thumb"> <img src="/media/{{image.Product_Image}}"  width="100" height="100"></a>
+      {% endfor %}
+
+     <h2 class="title">{{product.Product_Name}}</h2>
+    <h4 class="title">Price: {{product.Product_Price}}PKR</h4>
+    <p>{{product.Product_Description}}</p>
+
+
+    <dl class="row">
+      <dt class="col-sm-3">Brand</dt>
+      <dd class="col-sm-9">{{product.Product_Brand}}</dd>
+
+      <dt class="col-sm-3">Stock</dt>
+      <dd class="col-sm-9">{{product.Product_Stock}}</dd>
+    </dl>
+    <a href="#" class="btn  btn-outline-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a>
+    </div>
+
+{% endblock main_content %}
+{% block myscripts %}
+
+
+
+{% endblock myscripts %}

@@ -7,13 +7,26 @@ from .forms import BrandForm
 from django.contrib import  messages
 from django.core import serializers
 from math import ceil
+from django.template.defaulttags import register
 
 def Index(request):
     products = Product.objects.all()                #retrive all products
     n=len(products)
     nslides = n//4 + ceil((n/4)-(n//4))
-    params={'no_of_slides':nslides, 'range':range(1, nslides), 'product':products}
+    productImages ={}
+    for product in products:
+        ProductImage = PImage.objects.filter(Product=product).values().first()
+        productImages[product.id] = ProductImage
+    print("this is query set")
+    print(productImages)
+    params={'no_of_slides':nslides, 'range':range(1, nslides), 'product':products,"PImage":productImages}
     return render(request, 'index.html',params)
+
+@register.filter
+def get_item(dictionary, key):
+    print("in get item")
+    print(dictionary[key]['Product_Image'])
+    return dictionary[key]['Product_Image']
 
 def brand_register(request):
     if request.method == 'POST':
@@ -126,3 +139,13 @@ def product_update(request):
         Product.objects.filter(id=Pid).update(Product_Name=Product_name,Product_Price=Product_price,Product_Category=Product_category,Product_Description=Product_description
                                               ,Product_Stock=Product_stock)
     return  redirect('brand_dashboard')
+
+
+def get_single_product(request,slug):
+    product = Product.objects.get(slug=slug)
+    FImage = PImage.objects.filter(Product=product).first
+    productsImages = PImage.objects.filter(Product=product)
+    print(productsImages)
+    context = {'product': product, 'FeaturedImage': FImage, 'images': productsImages}
+
+    return render(request, 'single_product.html', context=context)

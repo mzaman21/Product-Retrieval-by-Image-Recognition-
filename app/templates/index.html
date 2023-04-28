@@ -22,18 +22,19 @@
       {% for product in product %}
         <div class="col-md-3">
           <div class="card">
-            <img src="#" class="card-img-top" alt="{{ product.Product_Name }}">
-            <div class="card-body">
+            <img src="/media/{{PImage|get_item:product.id}}" class="card-img-top" alt="{{ product.Product_Name }}">
+             <div class="card-body">
               <h5 class="card-title">{{ product.Product_Name }}</h5>
               <p class="card-text">{{ product.Product_Description }}</p>
               <p class="card-text">Price : {{ product.Product_Price }} $</p>
-              <a href="#" class="btn btn-primary">View</a>
+              <a href="{% url 'get_single_product' product.slug %}" class="btn btn-primary">View</a>
             </div>
           </div>
         </div>
       {% endfor %}
+    <h5 class="card-title"></h5>
     </div>
-  </h2>
+
 {% endblock %}
 
 
