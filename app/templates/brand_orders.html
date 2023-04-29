@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Brand Dashboard{% endblock title %}
+{% block main_content %}
+    <div class="container-md">
+        <h1>Orders</h1>
+        <p>Follwoing Orders are placed for your products</p>
+         <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Total Price</th>
+              <th scope="col">Delivery Details</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for product in orders %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ product.Product_Name }}</td>
+              <td>{{ product.Product_Category }}</td>
+              <td>{{ product.Product_Price }}</td>
+              <td>{{ product.Quantity }}</td>
+              <td>{{ product.Total }}</td>
+              <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customer">
+                    View
+                </button></td>
+            </tr>
+               <!-- Customer Detials Modal -->
+                <div class="modal fade" id="customer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Customer Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <p><b>Name:</b> {{ product.CName}} </p>
+                          <p><b>Email:</b> {{ product.CEmail}} </p>
+                          <p><b>Phone:</b> {{ product.CPhone }} </p>
+                          <p><b>Address:</b> {{ product.CAddress }} </p>
+                          <p><b>City:</b> {{ product.CCity }}</p>
+                          <p><b>State:</b> {{ product.CState }}</p>
+                          <p><b>Zipcode:</b> {{ product.CZipcode }} </p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+{% endblock main_content %}
+{% block myscripts %}
+
+
+
+{% endblock myscripts %}

@@ -1,9 +1,13 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Brand, Product, PImage
+from .models import Brand, Product, PImage,Customer,OrderItem,Order
 
 admin.site.register(Brand)
+admin.site.register(Customer)
+admin.site.register(OrderItem)
+admin.site.register(Order)
+
 # admin.site.register(Product)
 # admin.site.register(PImage)
 

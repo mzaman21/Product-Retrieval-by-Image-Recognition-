@@ -2,8 +2,8 @@ import json
 from django.shortcuts import render,redirect
 
 from PRIR.settings import CART_SESSION_ID
-from .cart import Cart,SProduct
-from .models import Brand,Product,PImage
+from .cart import Cart,SProduct,OrderdProduct
+from .models import Brand,Product,PImage,Customer,Order,OrderItem
 from django.http import JsonResponse
 from django.shortcuts import render
 from .forms import BrandForm
@@ -218,3 +218,78 @@ def cart_detials(request):
         "total_cost":cart_total
     }
     return render(request,"cart_details.html",context)
+
+def checkout(request):
+    if request.method=='POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        address = request.POST['address']
+        city = request.POST['city']
+        state = request.POST['state']
+        zip = request.POST['zip']
+
+        new_customer = Customer(name=name,email=email,phone=phone,address=address,city=city,state=state,zipcode=zip)
+        new_customer.save()
+        print(new_customer)
+        # get product present in current cart session
+        product_in_cart_session = request.session[CART_SESSION_ID]
+
+        for pid in product_in_cart_session:
+            product = Product.objects.filter(id=pid)
+            p_quantity_cart = product_in_cart_session[pid]['quantity']
+            for p in product :
+                create_order_item = OrderItem(CustomerOrder=new_customer,ProductOrder=p,BrandOrder=p.Product_Brand,
+                                              ItemPrice=p.Product_Price,ItemQuantity=p_quantity_cart)
+                create_order_item.save()
+                print(create_order_item)
+            new_order = Order(OrderDetail=create_order_item)
+            new_order.save()
+            print(new_order)
+
+    return render(request,"checkout.html")
+
+def brand_orders(request):
+
+    BrandId = request.COOKIES['Brand_ID']
+    brands = Brand.objects.filter(id=BrandId)
+
+    for brand in brands:
+        CBrand = Brand(Brand_Name=brand.Brand_Name, Brand_Email=brand.Brand_Email, Brand_Password=brand.Brand_Password,
+                       Brand_Address=brand.Brand_Address, Brand_City=brand.Brand_City, Brand_State=brand.Brand_State,
+                       Brand_Zip=brand.Brand_Zip, Brands_Logo=brand.Brands_Logo)
+
+    allorders = Order.objects.all()
+
+    brand_orderd_products=[]
+
+    for orderItem in allorders:
+        if orderItem.OrderDetail.BrandOrder.id == int(BrandId):
+
+            product_total = orderItem.OrderDetail.ItemQuantity * int(orderItem.OrderDetail.ProductOrder.Product_Price)
+            orderedProduct=OrderdProduct(Product_id=orderItem.OrderDetail.ProductOrder.id,
+                                         Product_Name=orderItem.OrderDetail.ProductOrder.Product_Name,
+                                         Product_Price=orderItem.OrderDetail.ProductOrder.Product_Price,
+                                         Product_Category=orderItem.OrderDetail.ProductOrder.Product_Category,
+                                         Product_Description=orderItem.OrderDetail.ProductOrder.Product_Description,
+                                         Product_Stock=orderItem.OrderDetail.ProductOrder.Product_Stock,
+                                         slug=orderItem.OrderDetail.ProductOrder.slug,
+                                         Quantity=orderItem.OrderDetail.ItemQuantity,
+                                         Total= product_total,
+                                         CName= orderItem.OrderDetail.CustomerOrder.name,
+                                         CEmail= orderItem.OrderDetail.CustomerOrder.email,
+                                         CPhone= orderItem.OrderDetail.CustomerOrder.phone,
+                                         CAddress= orderItem.OrderDetail.CustomerOrder.address,
+                                         CCity= orderItem.OrderDetail.CustomerOrder.city,
+                                         CState= orderItem.OrderDetail.CustomerOrder.state,
+                                         CZipcode= orderItem.OrderDetail.CustomerOrder.zipcode,
+                                         )
+
+            brand_orderd_products.append(orderedProduct)
+            print(brand_orderd_products)
+
+    context={
+        "orders":brand_orderd_products
+    }
+    return render(request, "brand_orders.html",context)
+

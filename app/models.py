@@ -39,3 +39,33 @@ class PImage(models.Model):
     Product_Image = models.ImageField(upload_to='Product_Images/')
     def __str__(self):
         return self.Product.Product_Name
+
+
+
+class Customer(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    phone = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    zipcode = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
+
+class OrderItem(models.Model):
+    CustomerOrder = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    ProductOrder = models.ForeignKey(Product,on_delete=models.CASCADE)
+    BrandOrder = models.ForeignKey(Brand,on_delete=models.CASCADE)
+    ItemPrice = models.CharField(max_length=20)
+    ItemQuantity = models.IntegerField(max_length=100,default=1)
+
+    def __str__(self):
+        return self.CustomerOrder.name
+
+class Order(models.Model):
+    OrderDetail = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.OrderDetail.ProductOrder.Product_Name

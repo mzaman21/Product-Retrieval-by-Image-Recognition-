@@ -69,4 +69,24 @@ class SProduct:
     self.slug =slug
     self.Quantity=Quantity
 
+class OrderdProduct:
+    def __init__(self, Product_id, Product_Name, Product_Price, Product_Category, Product_Description, Product_Stock,
+                 slug, Quantity,Total,CName,CEmail,CPhone,CAddress,CCity,CState,CZipcode):
+        self.Product_id = Product_id
+        self.Product_Name = Product_Name
+        self.Product_Price = Product_Price
+        self.Product_Category = Product_Category
+        self.Product_Description = Product_Description
+        self.Product_Stock = Product_Stock
+        self.slug = slug
+        self.Quantity = Quantity
+        self.Total= Total
+        self.CName=CName
+        self.CEmail=CEmail
+        self.CPhone=CPhone
+        self.CAddress=CAddress
+        self.CCity=CCity
+        self.CState=CState
+        self.CZipcode=CZipcode
+
 
