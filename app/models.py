@@ -66,6 +66,7 @@ class OrderItem(models.Model):
 class Order(models.Model):
     OrderDetail = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    dispatch_status = models.BooleanField(default=False)
 
     def __str__(self):
         return self.OrderDetail.ProductOrder.Product_Name

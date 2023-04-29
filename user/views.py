@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+
+from app.cart import OrderdProduct
+from app.models import Customer,Order,OrderItem,Product,PImage
 from django.http import HttpResponse
 
 # from .models import User
@@ -9,8 +12,43 @@ from django.http import HttpResponse
 
 # Create your views here.
 def userHome(request):
-    return render(request,"userHome.html")
+    uemail = request.COOKIES.get('User_Email',"no")
+    if uemail!="no":
+        uemail = request.COOKIES['User_Email']
+        user = Customer.objects.filter(email=uemail)
+        allorders = Order.objects.all()
+        user_orderd_products = []
+        for orderItem in allorders:
+            for u in user:
+                if orderItem.OrderDetail.CustomerOrder.email == uemail:
+                    product_total = orderItem.OrderDetail.ItemQuantity * int(
+                        orderItem.OrderDetail.ProductOrder.Product_Price)
 
+                    orderedProduct = OrderdProduct(Product_id=orderItem.OrderDetail.ProductOrder.id,
+                                                   Product_Name=orderItem.OrderDetail.ProductOrder.Product_Name,
+                                                   Product_Price=orderItem.OrderDetail.ProductOrder.Product_Price,
+                                                   Product_Category=orderItem.OrderDetail.ProductOrder.Product_Category,
+                                                   Product_Description=orderItem.OrderDetail.ProductOrder.Product_Description,
+                                                   Product_Stock=orderItem.OrderDetail.ProductOrder.Product_Stock,
+                                                   slug=orderItem.OrderDetail.ProductOrder.slug,
+                                                   Quantity=orderItem.OrderDetail.ItemQuantity,
+                                                   Total=product_total,
+                                                   CName=orderItem.OrderDetail.CustomerOrder.name,
+                                                   CEmail=orderItem.OrderDetail.CustomerOrder.email,
+                                                   CPhone=orderItem.OrderDetail.CustomerOrder.phone,
+                                                   CAddress=orderItem.OrderDetail.CustomerOrder.address,
+                                                   CCity=orderItem.OrderDetail.CustomerOrder.city,
+                                                   CState=orderItem.OrderDetail.CustomerOrder.state,
+                                                   CZipcode=orderItem.OrderDetail.CustomerOrder.zipcode,
+                                                   )
+
+                    user_orderd_products.append(orderedProduct)
+
+        context = {
+            "orders": user_orderd_products
+        }
+        return render(request, 'userHome.html', context)
+    return render(request,'userLogin.html')
 def userSignUp(request):
     if request.method == 'POST':
         uname = request.POST.get('username')
@@ -53,26 +91,25 @@ def userSignUp(request):
 
 def userLogin(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        pass1 = request.POST.get('pass')
-        user = authenticate(request, username=username, password=pass1)
-        if user is not None:
-            login(request, user)
-            context={
-                'user_name':user.username
-            }
-            return render(request,'userHome.html',context)
+        uemail = request.POST.get('email')
+        user = Customer.objects.filter(email=uemail)
 
+        if user.exists():
+           for u in user:
+               Useremail = u.email
+           response = redirect('userHome')
+           response.set_cookie('User_Email',Useremail)
+           return response
         else:
-            messages.error(request,"Username or Password is incorrect!!!")
-            return redirect('uhome')
+            messages.error(request,"Brand Credentials")
+            return render(request, 'userLogin.html')
 
-    else:
-        return render(request,"userLogin.html")
+    return render(request,"userLogin.html")
 
 def uSingOut(request):
-    logout(request)
-    return redirect('ulogin')
+    response = redirect('ulogin')
+    response.delete_cookie('User_Email')
+    return response
 
 
 

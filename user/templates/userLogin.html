@@ -1,23 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Login Page</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Brand Dashboard{% endblock title %}
+{% block main_content %}
+    <div class="container-md">
+        <h1>Welcome To PRIR</h1>
+        <p>Enter your Email to Vie your account details</p>
+        <form action="/user/ulogin/" method="post"> {% csrf_token %}
+          <div class="mb-3">
+            <label for="uemail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="uemail" name="email" >
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+  </div>
 
- <h3>Login Here</h3>
-    <form method="post" action="{% url 'ulogin' %}">
+    </div>
 
-        {% csrf_token %}
-        <label for="username">Username</label>
-        <input type="text" placeholder="Enter Username" id="username" name="username">
-        <br>
-        <label for="password">Password</label>
-        <input type="password" placeholder="Password" id="password" name="pass">
-        <br>
-        <button type="submit">Log In</button><br>
+{% endblock main_content %}
+{% block myscripts %}
 
-        <a href="{% url 'usignup' %}" >Create a account</a>
-    </form>
-</body>
-</html>
+
+
+{% endblock myscripts %}
