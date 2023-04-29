@@ -55,7 +55,7 @@ class Cart(object):
         for p in self.cart.keys():
             self.cart[str(p)]['product'] = Product.objects.get(pk=p)
 
-        return sum(item['quantity'] * item['product'].price for item in self.cart.values())
+        return sum(item['quantity'] * item['product'].Product_Price for item in self.cart.values())
 
 
 class SProduct:

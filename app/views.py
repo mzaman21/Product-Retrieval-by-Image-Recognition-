@@ -173,11 +173,28 @@ def add_to_cart(request):
 
 def cart_detials(request):
 
+    cart = Cart(request)
+
+    remove_from_cart = request.GET.get('remove_from_cart', '')
+    change_quantity = request.GET.get('change_quantity', '')
+    quantity = request.GET.get('quantity', 0)
+
+    if remove_from_cart:
+        cart.remove(remove_from_cart)
+
+    if change_quantity:
+        cart.add(change_quantity, quantity, True)
+
+    #get product present in current cart session
     product_in_cart_session = request.session[CART_SESSION_ID]
-    print("In Session")
-    print(product_in_cart_session)
+
     cart_products=[]
     productImages={}
+
+    one_product_total = 0
+    cart_total = 0
+
+    #get product and make product object and set relevent attributes and get thumbnail image also calculate total cart price
     for pid in product_in_cart_session:
         product = Product.objects.filter(id=pid)
         p_quantity_cart=product_in_cart_session[pid]['quantity']
@@ -189,8 +206,15 @@ def cart_detials(request):
             productImages[p.id] = ProductImage
             cart_products.append(make_product)
 
+            #convert price in string to int
+            PPrice = int(make_product.Product_Price)
+
+            one_product_total = make_product.Quantity*PPrice
+            cart_total = cart_total+one_product_total
+
     context ={
         "cart_products":cart_products,
-        "PImage":productImages
+        "PImage":productImages,
+        "total_cost":cart_total
     }
     return render(request,"cart_details.html",context)
