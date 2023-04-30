@@ -2,15 +2,16 @@
 {% block title %}Brand Dashboard{% endblock title %}
 {% block main_content %}
     <div class="container-md">
-        <h1>This is single Product View</h1>
-        <p>Add to cart and continue shopping or go to checkout </p>
-        <h1 class="title">Cart</h1>
+
+        <h1 class="title">Shopping Cart</h1>
+
+    <div class="container m-3 p-4 round-3">
 
     {% if cart_products %}
 
         <div class="box mb-6">
             <div class="table">
-                <table class="table is-fullwidth is-striped">
+                <table class="table is-fullwidth is-striped align-middle">
                     <thead>
                         <tr>
                             <th></th>
@@ -27,23 +28,23 @@
                             <tr>
                                 <td>
                                     <figure class="image is-64x64">
-                                        <img src="/media/{{PImage|get_item:item.Product_id}}" alt="{{item.Product_Name}}" width="70" height="70">
+                                        <img class="rounded" src="/media/{{PImage|get_item:item.Product_id}}" alt="{{item.Product_Name}}" style="width: 5rem; height: 7rem; object-fit: cover">
                                     </figure>
                                 </td>
                                 <td>
-                                    <a href="{% url 'get_single_product' item.slug %}">{{item.Product_Name}}</a>
+                                    <a class="h5 text-dark" style="text-decoration: none" href="{% url 'get_single_product' item.slug %}">{{item.Product_Name}}</a>
                                 </td>
                                 <td>
-                                    {{item.Quantity}}
 
-                                    <a href="?change_quantity={{ item.Product_id }}&quantity=-1">-</a>
-                                    <a href="?change_quantity={{ item.Product_id }}&quantity=1">+</a>
+                                    <a style="text-decoration: none" href="?change_quantity={{ item.Product_id }}&quantity=-1">-</a>
+                                    <span class="border m-3 p-2 rounded">{{item.Quantity}}</span>
+                                    <a style="text-decoration: none" href="?change_quantity={{ item.Product_id }}&quantity=1">+</a>
 
                                 </td>
 
                                 <td>${{ item.Product_Price }}</td>
                                 <td>
-                                    <a href="?remove_from_cart={{item.Product_id}}" class="delete">Remove</a>
+                                    <a href="?remove_from_cart={{item.Product_id}}" class="delete btn btn-danger">Remove</a>
                                 </td>
                             </tr>
 
@@ -62,7 +63,9 @@
             </div>
         </div>
     </div>
-    <div class="container-md">
+
+
+    <div class="container-md border m-3 p-5">
       <form class="row g-3" action="/checkout/" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <div class="col-md-0">
         <label for="name" class="form-label">Full Name</label>
@@ -98,6 +101,9 @@
       </form>
     </div>
     {% endif %}
+
+
+    </div>
 
 
 {% endblock main_content %}
