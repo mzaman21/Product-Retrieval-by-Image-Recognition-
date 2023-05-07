@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
 {% block title %}Brand Dashboard{% endblock title %}
 {% block main_content %}
-    <div class="container-md">
-        <h1>Welcome To PRIR</h1>
-        <p>Enter your Email to Vie your account details</p>
-        <form action="/user/ulogin/" method="post"> {% csrf_token %}
+    <div class="container-md p-5 m-5">
+        <h1 class="text-center">Welcome To PRIR</h1>
+        <p class="text-center">Enter your Email to View your account details</p>
+
+        <div class="d-flex justify-content-center align-items-center" style="height: 20vh;">
+        <form action="/user/ulogin/" method="post" STYLE="width: 40rem"> {% csrf_token %}
           <div class="mb-3">
             <label for="uemail" class="form-label">Email address</label>
             <input type="email" class="form-control" id="uemail" name="email" >
           </div>
           <button type="submit" class="btn btn-primary">Login</button>
         </form>
+  </div>
   </div>
 
     </div>

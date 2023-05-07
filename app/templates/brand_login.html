@@ -1,16 +1,12 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register Brand</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-  </head>
-  <body>
-  <div class="container-md">
-    <h1>Welcome Back!</h1>
-    <p>Login to your store and manage your products and orders form customer</p>
-   <form action="/brand_login/" method="post"> {% csrf_token %}
+{% extends 'base.html' %}
+{% block title %}Brand Register{% endblock title %}
+
+{% block main_content %}
+  <div class="container-md p-5 m-5">
+    <h1 class="text-center" >Welcome Back!</h1>
+    <p class="text-center" >Login to your store and manage your products and orders form customer</p>
+<div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
+   <form action="/brand_login/" method="post" style="width: 40rem"> {% csrf_token %}
       <div class="mb-3">
         <label for="brand_email" class="form-label">Email address</label>
         <input type="email" class="form-control" id="brand_email" name="brand_email" >
@@ -26,6 +22,9 @@
       <button type="submit" class="btn btn-primary">Login</button>
     </form>
   </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-  </body>
-</html>
+  </div>
+  </div>
+{% endblock main_content %}
+
+{% block myscripts %}
+{% endblock myscripts %}

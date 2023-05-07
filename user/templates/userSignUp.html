@@ -1,29 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Signup Page</title>
+{% extends 'base.html' %}
+{% block title %}Brand Dashboard{% endblock title %}
+{% block main_content %}
 
-</head>
-<body>
-    <h3>Signup Here</h3>
-    <form action="{% url 'usignup' %}" method="post">
+    <div class="container-md p-5 m-5">
+
+
+
+    <h1 class="text-center" >Welcome! Register Yourself Here</h1>
+
+                <div class="d-flex justify-content-center align-items-center" style="height: 70vh;">
+
+    <form action="{% url 'usignup' %}" style="width: 40rem" method="post">
         {% csrf_token %}
 
-        <label for="username">Username</label>
-        <input type="text" placeholder="Username" name="username" id="username">
+        <label for="username" class="form-label">Username</label>
+        <input class="form-control" type="text" placeholder="Username" name="username" id="username">
         <br>
-        <label for="email">Email</label>
-        <input type="email" placeholder="Email or Phone" name="email" id="email">
+        <label for="email" class="form-label">Email</label>
+        <input class="form-control" type="email" placeholder="Email or Phone" name="email" id="email">
         <br>
-        <label for="password1">Password</label>
-        <input type="password" placeholder="Password" id="password1" name="password1">
+        <label for="password1" class="form-label">Password</label>
+        <input class="form-control" type="password" placeholder="Password" id="password1" name="password1">
         <br>
-        <label for="password2">Confirm Password</label>
-        <input type="password" placeholder="Confirm Password" id="password2" name="password2">
+        <label for="password2" class="form-label">Confirm Password</label>
+        <input class="form-control" type="password" placeholder="Confirm Password" id="password2" name="password2">
         <br>
-        <button type="submit">Signup</button><br>
+        <button type="submit" class="btn btn-primary">Signup</button><br>
 
         <a href="{% url 'ulogin' %}" >i have already account</a>
     </form>
-</body>
-</html>
+    </div>
+    </div>
+
+{% endblock main_content %}
+{% block myscripts %}
+
+
+
+{% endblock myscripts %}
