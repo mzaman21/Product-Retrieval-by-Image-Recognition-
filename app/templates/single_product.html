@@ -7,10 +7,12 @@
             <div class="container px-4 px-lg-5 my-3">
                 <div class="row gx-4 gx-lg-5 align-items-center">
                     <div class="col-md-6 text-center">
-                        <img class="card-img-top mb-5 mb-md-0" style="height: 30rem;width: 25rem; object-fit: cover" src="/media/{{FeaturedImage.Product_Image}}" alt="..." />
+{#                    <div id="">#}
+                        <img class="card-img-top mb-5 mb-md-0" id="main-image" style="height: 30rem;width: 25rem; object-fit: cover" src="/media/{{FeaturedImage.Product_Image}}" alt="..." />
+{#                    </div>#}
                         <div class="thumbs-wrap mt-3">
                           {% for image in images %}
-                          <a href="#" class="item-thumb"> <img src="/media/{{image.Product_Image}}"  width="100" height="100"></a>
+                          <a href="#" class="item-thumb"> <img src="/media/{{image.Product_Image}}"  width="100" height="100" onclick="setImage(this)"></a>
                           {% endfor %}
                         </div>
                     </div>
@@ -18,7 +20,7 @@
                     <div class="col-md-6">
                         <div class="small mb-1">SKU: BST-498</div>
                         <h1 class="display-5 fw-bolder">{{ product.Product_Name }}</h1>
-                        <div class="fs-5 mb-5">
+                        <div class="fs-5 mb-2">
                             <span class="text-decoration-line-through">45.00 PKR</span>
                             <span>{{ product.Product_Price }} PKR</span><br>
                             <span>Brand : {{ product.Product_Brand }}</span><br>
@@ -36,15 +38,15 @@
                         <form method="post" action="/add_to_cart/">
                             {% csrf_token %}
 
-                            <div class="field has-addons flex">
+                            <div class="field has-addons flex row">
                                 <div class="control">
                                     <input type="number" name="productid" value="{{ product.id }}" hidden>
                                 </div>
-                                <div class="control">
-                                    <input type="number" name="quantity" value="1" class="input" min="1" id="">
+                                <div class="control col-2">
+                                    <input type="number" name="quantity" value="1" class="input rounded" min="1" id="" style="width: 90px; height: 40px; text-align: center">
                                 </div>
 
-                                <div class="control">
+                                <div class="control col-10">
                                     <button class="btn  btn-outline-primary">Add to Cart</button>
                                 </div>
                             </div>
@@ -55,9 +57,18 @@
             </div>
         </section>
 
+    <script>
+     function setImage(element) {
+         var mainImg = document.getElementById('main-image');
+         mainImg.src=element.src;
+
+        console.log("clicked");
+    }
+    </script>
 
 {% endblock main_content %}
 
 
 {% block myscripts %}
+
 {% endblock myscripts %}
