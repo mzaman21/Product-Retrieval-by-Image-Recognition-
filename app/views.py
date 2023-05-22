@@ -12,6 +12,14 @@ from django.core import serializers
 from math import ceil
 from django.template.defaulttags import register
 
+import os
+import cv2
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from skimage.metrics import structural_similarity as ssim
+import numpy as np
+
+from PIL import Image
 def Index(request):
     products = Product.objects.all()                #retrive all products
     n=len(products)
@@ -293,3 +301,59 @@ def brand_orders(request):
     }
     return render(request, "brand_orders.html",context)
 
+def image_recognition(request):
+    if request.method=='POST':
+
+        # Get uploaded image
+        dress = request.FILES['dress']
+        print(dress)
+        # Save the uploaded image to disk
+        fs = FileSystemStorage()
+        filename = fs.save(dress.name, dress)
+        uploaded_file_path = os.path.join(settings.MEDIA_ROOT, filename)
+
+        # Read uploaded image and perform image processing
+        img = cv2.imread(uploaded_file_path)
+        # Resize the uploaded image to a fixed height of 300 pixels while maintaining the aspect ratio
+        height = 300
+        width = int(img.shape[1] * height / img.shape[0])
+        img = cv2.resize(img, (width, height))
+        # Convert image from BGR to RGB
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        # Get list of images in a folder
+        folder_path = os.path.join(settings.MEDIA_ROOT, 'product_images')
+        file_names = os.listdir(folder_path)
+
+        # Create a list to store the paths of similar images
+        similar_images = []
+
+        # Iterate through each image and perform image processing
+        for file_name in file_names:
+            img_path = os.path.join(folder_path, file_name)
+            img2 = cv2.imread(img_path)
+            # Resize the image to the same size as the uploaded image
+            img2 = cv2.resize(img2, (img.shape[1], img.shape[0]))
+            # Convert image from BGR to RGB
+            img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+
+            # Compare the processed uploaded image and img2
+            # If they are similar, add the path of img2 to similar_images
+            if is_similar(img, img2):
+                similar_images.append(img_path)
+                print("Yes image is similar")
+        print(similar_images)
+        # Do something here
+        return render(request,"image_recognition.html")
+    return render(request,"image_recognition.html")
+
+def is_similar(img1, img2, threshold=0.8):
+    # Compare the two images and return True if they are similar,
+    # otherwise return False
+    img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2GRAY)
+    img2 = cv2.cvtColor(np.array(img2), cv2.COLOR_RGB2GRAY)
+    score, _ = ssim(img1, img2, full=True)
+    if score >= threshold:
+        return True
+    else:
+        return False

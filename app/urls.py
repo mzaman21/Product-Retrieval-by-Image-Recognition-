@@ -17,5 +17,6 @@ urlpatterns = [
     path('cart_detials/',views.cart_detials,name='cart_detials'),
     path('checkout/',views.checkout,name='checkout'),
     path('brand_orders/',views.brand_orders,name='brand_orders'),
+    path('image_recognition/',views.image_recognition,name='image_recognition'),
 
 ]
