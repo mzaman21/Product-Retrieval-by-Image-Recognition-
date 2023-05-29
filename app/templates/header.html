@@ -41,7 +41,6 @@
 							<div class="top_bar_menu">
 								<ul class="standard_dropdown top_bar_dropdown">
 								 <li>
-{#										<a href="#">English<i class="fas fa-chevron-down"></i></a>#}
                                      <p>English</p>
 {#										<ul>#}
 {#											<li><a href="#">Italian</a></li>#}
@@ -60,8 +59,6 @@
 								</ul>
 							</div>
 							<div class="top_bar_user">
-{#								<div><a href="#">Register</a></div>#}
-{#								<div><a href="#">Sign in</a></div>#}
 								<div><a href="/user">User | </a></div>
 								<div><a href="/brand_register">Brand | </a></div>
 								<div><a href="/admin">Admin</a></div>
@@ -81,7 +78,7 @@
 					<!-- Logo -->
 					<div class="col-lg-2 col-sm-3 col-3 order-1">
 						<div class="logo_container">
-							<div class="logo"><a href="/">PRIR</a></div>
+                            <div class="logo"><a href="/"><img src="{% static 'logo.png' %}" style="width: 50px;"></a> </div>
 						</div>
 					</div>
 
@@ -89,6 +86,7 @@
 					<div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
 						<div class="header_search">
 							<div class="header_search_content">
+<<<<<<< HEAD
 								<div class="">
 {#									<form action="#" class="header_search_form clearfix">#}
 {#										<input type="search" required="required" class="header_search_input" placeholder="Search for products...">#}
@@ -115,6 +113,13 @@
                                              <button type="submit" class="btn btn-primary">Upload</button>
                                          </div>
                                       </form>
+=======
+								<div class="header_search_form_container">
+									<form action="#" class="header_search_form clearfix">
+										<input type="search" required="required" class="header_search_input" placeholder="Search for products...">
+										<button type="submit" class="header_search_button trans_300" value="Submit"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918770/search.png" alt=""></button>
+									</form>
+>>>>>>> 61c60428c40bc5ad00503a64b38761a4b20015af
 								</div>
 							</div>
 						</div>
@@ -129,6 +134,7 @@
 {#									<div class="wishlist_text"><a href="#">Wishlist</a></div>#}
 {#									<div class="wishlist_count">10</div>#}
 {#								</div>#}
+
 							</div>
 
 							<!-- Cart -->
@@ -184,8 +190,8 @@
                                     <li>
 										<a href="#">Women<i class="fas fa-chevron-down"></i></a>
 									</li>
-									<li><a href="#">Blog<i class="fas fa-chevron-down"></i></a></li>
-									<li><a href="#">Contact<i class="fas fa-chevron-down"></i></a></li>
+{#									<li><a href="#">Blog<i class="fas fa-chevron-down"></i></a></li>#}
+{#									<li><a href="#">Contact<i class="fas fa-chevron-down"></i></a></li>#}
 								</ul>
 							</div>
 
@@ -294,44 +300,6 @@
 
 	</header>
 </div>
-
-{##}
-{#<!-- old header -->#}
-{#  <header CLASS="m-2 border">      <!--header code here-->#}
-{#      <nav class="navbar navbar-expand-lg bg-body-tertiary">#}
-{#      <div class="container-fluid">#}
-{#        <a class="navbar-brand" href="/"><img src="/logo.jpg" alt="LOGO"></a>#}
-{#        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">#}
-{#          <span class="navbar-toggler-icon"></span>#}
-{#        </button>#}
-{#        <div class="collapse navbar-collapse" id="navbarSupportedContent">#}
-{#          <ul class="navbar-nav me-auto mb-2 mb-lg-0">#}
-{#            <li class="nav-item">#}
-{#              <a class="nav-link active" aria-current="page" href="/">Home</a>#}
-{#            </li>#}
-{#            <li class="nav-item">#}
-{#              <a class="nav-link" href="/brand_register">Brand</a>#}
-{#            </li>#}
-{#              <li class="nav-item">#}
-{#              <a class="nav-link" href="/user">User</a>#}
-{#            </li>#}
-{#              <li class="nav-item">#}
-{#              <a class="nav-link" href="/admin">Admin</a>#}
-{#            </li>#}
-{#          </ul>#}
-{#          <form class="d-flex" role="search">#}
-{#            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">#}
-{#            <button class="btn btn-outline-success" type="submit">Search</button>#}
-{##}
-{#          </form>#}
-{#        </div>#}
-{#      </div>#}
-{#    </nav>#}
-{#  </header>#}
-{#  #}
-{#  #}
-{#  #}
-
 
   </body>
 
