@@ -327,7 +327,8 @@ def image_recognition(request):
 
         # Create a list to store the paths of similar images
         similar_images = []
-
+        mostsimilar = []
+        halfsimilar = []
         # Iterate through each image and perform image processing
         for file_name in file_names:
             img_path = os.path.join(folder_path, file_name)
@@ -337,23 +338,75 @@ def image_recognition(request):
             # Convert image from BGR to RGB
             img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
 
-            # Compare the processed uploaded image and img2
-            # If they are similar, add the path of img2 to similar_images
-            if is_similar(img, img2):
-                similar_images.append(img_path)
-                print("Yes image is similar")
-        print(similar_images)
-        # Do something here
-        return render(request,"image_recognition.html")
-    return render(request,"image_recognition.html")
+           #Compare the processed uploaded image and img2
+            #If they are similar, add the path of img2 to similar_images
 
-def is_similar(img1, img2, threshold=0.8):
+
+            result_score = is_similar(img,img2)
+            if result_score==1:
+
+                mostsimilar.append(img_path)
+
+            elif result_score==2:
+
+                halfsimilar.append(img_path)
+
+            else:
+                print("Nothing is similar")
+
+
+
+        for image_path in mostsimilar:
+            head_path = os.path.split(image_path)
+
+        MostSimilarProducts = []
+        products = Product.objects.all()
+        for product in products:
+            ProductImage = PImage.objects.filter(Product=product)
+            for ProductImages in ProductImage:
+                for image_path in mostsimilar:
+                    head_path = os.path.split(image_path)
+                    imagepath = os.path.join("Product_Images/",head_path[1])
+                    print("Search Image Path:")
+                    print(imagepath)
+                    print("Image Path In Database:")
+                    print(ProductImages.Product_Image)
+                    if ProductImages.Product_Image == imagepath:
+                        print("True")
+                        MostSimilarProducts.append(product)
+        print(MostSimilarProducts)
+
+
+
+        #     if is_similar(img, img2):
+        #         similar_images.append(img_path)
+        #         print("Yes image is similar")
+        # print(similar_images)
+        #Do something here
+        return render(request,"index.html")
+    return render(request,"index.html")
+
+# def is_similar(img1, img2, threshold=0.8):
+#     # Compare the two images and return True if they are similar,
+#     # otherwise return False
+#     img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2GRAY)
+#     img2 = cv2.cvtColor(np.array(img2), cv2.COLOR_RGB2GRAY)
+#     score, _ = ssim(img1, img2, full=True)
+#     if score >= threshold:
+#         return True
+#     else:
+#         return False
+
+def is_similar(img1, img2):
     # Compare the two images and return True if they are similar,
     # otherwise return False
     img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2GRAY)
     img2 = cv2.cvtColor(np.array(img2), cv2.COLOR_RGB2GRAY)
     score, _ = ssim(img1, img2, full=True)
-    if score >= threshold:
-        return True
+
+    if score >= 0.8:
+        return 1
+    elif score >= 0.5 and score < 0.8:
+        return 2
     else:
-        return False
+        return 0

@@ -89,25 +89,32 @@
 					<div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
 						<div class="header_search">
 							<div class="header_search_content">
-								<div class="header_search_form_container">
-									<form action="#" class="header_search_form clearfix">
-										<input type="search" required="required" class="header_search_input" placeholder="Search for products...">
-										<div class="custom_dropdown" style="display: none;">
-											<div class="custom_dropdown_list">
-												<span class="custom_dropdown_placeholder clc">All Categories</span>
-												<i class="fas fa-chevron-down"></i>
-												<ul class="custom_list clc">
-													<li><a class="clc" href="#">All Categories</a></li>
-													<li><a class="clc" href="#">Computers</a></li>
-													<li><a class="clc" href="#">Laptops</a></li>
-													<li><a class="clc" href="#">Cameras</a></li>
-													<li><a class="clc" href="#">Hardware</a></li>
-													<li><a class="clc" href="#">Smartphones</a></li>
-												</ul>
-											</div>
-										</div>
-										<button type="submit" class="header_search_button trans_300" value="Submit"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918770/search.png" alt=""></button>
-									</form>
+								<div class="">
+{#									<form action="#" class="header_search_form clearfix">#}
+{#										<input type="search" required="required" class="header_search_input" placeholder="Search for products...">#}
+{#										<div class="custom_dropdown" style="display: none;">#}
+{#											<div class="custom_dropdown_list">#}
+{#												<span class="custom_dropdown_placeholder clc">All Categories</span>#}
+{#												<i class="fas fa-chevron-down"></i>#}
+{#												<ul class="custom_list clc">#}
+{#													<li><a class="clc" href="#">All Categories</a></li>#}
+{#													<li><a class="clc" href="#">Computers</a></li>#}
+{#													<li><a class="clc" href="#">Laptops</a></li>#}
+{#													<li><a class="clc" href="#">Cameras</a></li>#}
+{#													<li><a class="clc" href="#">Hardware</a></li>#}
+{#													<li><a class="clc" href="#">Smartphones</a></li>#}
+{#												</ul>#}
+{#											</div>#}
+{#										</div>#}
+{#										<button type="submit" class="header_search_button trans_300" value="Submit"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918770/search.png" alt=""></button>#}
+{#									</form>#}
+                                      <form class="form-inline" action="/image_recognition/" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                                         <div class="mb-3">
+                                              <label for="productimage" class="form-label">Upload Image to Search Outfit</label>
+                                              <input class="form-control" type="file" id="productimage" multiple name="dress">
+                                             <button type="submit" class="btn btn-primary">Upload</button>
+                                         </div>
+                                      </form>
 								</div>
 							</div>
 						</div>
