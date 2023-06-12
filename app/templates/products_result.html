@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Products Result{% endblock title %}
+{% block main_content %}
+   <div class="container m-5">
+        <h2 class="text-center">Most Similar Products</h2>
+        <div class="row m-3 p-5">
+          {% for product in product %}
+            <div class="col-md-3 mb-3">
+            <a href="{% url 'get_single_product' product.slug %}" >
+              <div class="card text-center">
+                <img src="/media/{{PImage|get_item:product.id}}" class="card-img-top img-fluid rounded" style="width: 20rem;height: 28rem; object-fit: cover" alt="{{ product.Product_Name }}">
+                 <div class="card-body">
+                  <h5 class="card-title">{{ product.Product_Name }}</h5>
+    {#              <p class="card-text">{{ product.Product_Description }}</p>#}
+                     <p class="card-text">{{ product.Product_Price }} PKR</p>
+    {#              <a href="{% url 'get_single_product' product.slug %}" class="btn btn-primary">View</a>#}
+                </div>
+              </div>
+                </a>
+            </div>
+          {% endfor %}
+        <h5 class="card-title"></h5>
+        </div>
+    </div>
+    {% if hsproduct|length != 0 %}
+        <div class="container m-5">
+        <h2 class="text-center">Most Similar Products</h2>
+        <div class="row m-3 p-5">
+          {% for product in hsproduct %}
+            <div class="col-md-3 mb-3">
+            <a href="{% url 'get_single_product' product.slug %}" >
+              <div class="card text-center">
+                <img src="/media/{{HPImage|get_item:product.id}}" class="card-img-top img-fluid rounded" style="width: 20rem;height: 28rem; object-fit: cover" alt="{{ product.Product_Name }}">
+                 <div class="card-body">
+                  <h5 class="card-title">{{ product.Product_Name }}</h5>
+    {#              <p class="card-text">{{ product.Product_Description }}</p>#}
+                     <p class="card-text">{{ product.Product_Price }} PKR</p>
+    {#              <a href="{% url 'get_single_product' product.slug %}" class="btn btn-primary">View</a>#}
+                </div>
+              </div>
+                </a>
+            </div>
+          {% endfor %}
+        <h5 class="card-title"></h5>
+        </div>
+    </div>
+    {% else %}
+        <h2 class="text-center">There are no similar products</h2>
+        <br>
+        <br>
+    {% endif %}
+{% endblock main_content %}
+
+
+{% block myscripts %}
+
+{% endblock myscripts %}

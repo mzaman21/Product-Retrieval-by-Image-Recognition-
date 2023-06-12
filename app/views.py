@@ -81,10 +81,24 @@ def brand_dashboard(request):
                        Brand_Address=brand.Brand_Address, Brand_City=brand.Brand_City, Brand_State=brand.Brand_State,
                        Brand_Zip=brand.Brand_Zip, Brands_Logo=brand.Brands_Logo)
 
+    allorders = Order.objects.all()
+    ordercount=0
+    productscount=0
+    for orderItem in allorders:
+        if orderItem.OrderDetail.BrandOrder.id == int(BrandId):
+           ordercount=ordercount+1
 
     Brand_Products = Product.objects.filter(Product_Brand__Brand_Name__contains=CBrand.Brand_Name)
+
+    for bproduct in Brand_Products:
+        productscount=productscount+1
+
     context = {
-        'BProducts': Brand_Products
+        'BProducts': Brand_Products,
+        'BrandName': CBrand.Brand_Name,
+        'BrandLogo': CBrand.Brands_Logo,
+        'OrdeCount': ordercount,
+        'ProductCount':productscount
     }
     return render (request,"brand_dashboard.html",context)
 
@@ -339,8 +353,7 @@ def image_recognition(request):
             img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
 
            #Compare the processed uploaded image and img2
-            #If they are similar, add the path of img2 to similar_images
-
+            #and check similarity percentage
 
             result_score = is_similar(img,img2)
             if result_score==1:
@@ -348,43 +361,85 @@ def image_recognition(request):
                 mostsimilar.append(img_path)
 
             elif result_score==2:
-
+                print("half similar")
                 halfsimilar.append(img_path)
 
             else:
                 print("Nothing is similar")
 
-
-
         for image_path in mostsimilar:
             head_path = os.path.split(image_path)
 
-        MostSimilarProducts = []
+        #list to store results
+        MostSimilarProducts = set()
+        HalfSimilarProducts = set()
+
+        #get all products
         products = Product.objects.all()
+
+        #for most similar products
         for product in products:
             ProductImage = PImage.objects.filter(Product=product)
             for ProductImages in ProductImage:
                 for image_path in mostsimilar:
                     head_path = os.path.split(image_path)
                     imagepath = os.path.join("Product_Images/",head_path[1])
-                    print("Search Image Path:")
-                    print(imagepath)
-                    print("Image Path In Database:")
-                    print(ProductImages.Product_Image)
                     if ProductImages.Product_Image == imagepath:
                         print("True")
-                        MostSimilarProducts.append(product)
+                        MostSimilarProducts.add(product)
+                        break
+
+        #for half similar product
+        for hproduct in products:
+            HSProductImage = PImage.objects.filter(Product=hproduct)
+            for HSProductImages in HSProductImage:
+                for himage_path in halfsimilar:
+                    hshead_path = os.path.split(himage_path)
+                    hsimagepath = os.path.join("Product_Images/", hshead_path[1])
+                    if HSProductImages.Product_Image == hsimagepath:
+                        print("True")
+                        HalfSimilarProducts.add(hproduct)
+                        break
+
+        HalfSimilarProducts = HalfSimilarProducts - MostSimilarProducts  # remove the common products
+        MostSimilarProducts = list(MostSimilarProducts)  # convert back to a list
+        HalfSimilarProducts = list(HalfSimilarProducts)  # convert back to a list
         print(MostSimilarProducts)
+        print(HalfSimilarProducts)
+
+        productImages = {}
+        for products in MostSimilarProducts:
+            FProductImage = PImage.objects.filter(Product=products).values().first()
+            productImages[products.id] = FProductImage
+
+        hsproductImages = {}
+        for hproducts in HalfSimilarProducts:
+            HProductImage = PImage.objects.filter(Product=hproducts).values().first()
+            hsproductImages[hproducts.id] = HProductImage
+
+        print(productImages)
+        print(hsproductImages)
+        params = {'product': MostSimilarProducts,'hsproduct':HalfSimilarProducts ,"PImage": productImages,"HPImage":hsproductImages}
 
 
-
-        #     if is_similar(img, img2):
-        #         similar_images.append(img_path)
-        #         print("Yes image is similar")
-        # print(similar_images)
-        #Do something here
-        return render(request,"index.html")
+        return render(request,"products_result.html",params)
     return render(request,"index.html")
+
+def is_similar(img1, img2):
+    # Compare the two images and return True if they are similar,
+    # otherwise return False
+    img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2GRAY)
+    img2 = cv2.cvtColor(np.array(img2), cv2.COLOR_RGB2GRAY)
+    score, _ = ssim(img1, img2, full=True)
+
+    if score >= 0.8:
+        return 1
+    elif score >= 0.6 and score < 0.8:
+        return 2
+    else:
+        return 0
+
+
 
 # def is_similar(img1, img2, threshold=0.8):
 #     # Compare the two images and return True if they are similar,
@@ -397,16 +452,8 @@ def image_recognition(request):
 #     else:
 #         return False
 
-def is_similar(img1, img2):
-    # Compare the two images and return True if they are similar,
-    # otherwise return False
-    img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2GRAY)
-    img2 = cv2.cvtColor(np.array(img2), cv2.COLOR_RGB2GRAY)
-    score, _ = ssim(img1, img2, full=True)
-
-    if score >= 0.8:
-        return 1
-    elif score >= 0.5 and score < 0.8:
-        return 2
-    else:
-        return 0
+ #if is_similar(img, img2):
+        #         similar_images.append(img_path)
+        #         print("Yes image is similar")
+        # print(similar_images)
+        #Do something here

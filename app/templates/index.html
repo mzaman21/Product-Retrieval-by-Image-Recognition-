@@ -57,7 +57,7 @@
 {#											<li class="list-inline-item"><i class="fa fa-star-o"></i></li>#}
 {#										</ul>#}
 {#									</div>#}
-									<p class="item-price"><strike>400.00 PKR</strike> <b>{{ product.Product_Price }} PKR</b></p>
+									<p class="item-price"><b>{{ product.Product_Price }} PKR</b></p>
 									<a href="{% url 'get_single_product' product.slug %}" class="btn btn-primary">Add to Cart</a>
 								</div>
 							</div>
@@ -86,7 +86,7 @@
 {#											<li class="list-inline-item"><i class="fa fa-star-o"></i></li>#}
 {#										</ul>#}
 {#									</div>#}
-									<p class="item-price"><strike>400.00 PKR</strike> <b>{{ product.Product_Price }} PKR</b></p>
+									<p class="item-price"><b>{{ product.Product_Price }} PKR</b></p>
 									<a href="{% url 'get_single_product' product.slug %}" class="btn btn-primary">Add to Cart</a>
 								</div>
 							</div>
@@ -116,11 +116,11 @@
         <div class="col-md-3 mb-3">
         <a href="{% url 'get_single_product' product.slug %}" >
           <div class="card text-center">
-            <img src="/media/{{PImage|get_item:product.id}}" class="card-img-top img-fluid rounded" style="width: 20rem;height: 18rem; object-fit: cover" alt="{{ product.Product_Name }}">
+            <img src="/media/{{PImage|get_item:product.id}}" class="card-img-top img-fluid rounded" style="width: 20rem;height: 28rem; object-fit: cover" alt="{{ product.Product_Name }}">
              <div class="card-body">
               <h5 class="card-title">{{ product.Product_Name }}</h5>
 {#              <p class="card-text">{{ product.Product_Description }}</p>#}
-                 <p class="card-text">{{ product.Product_Price }} $</p>
+                 <p class="card-text">{{ product.Product_Price }} PKR</p>
 {#              <a href="{% url 'get_single_product' product.slug %}" class="btn btn-primary">View</a>#}
             </div>
           </div>

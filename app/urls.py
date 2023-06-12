@@ -18,5 +18,6 @@ urlpatterns = [
     path('checkout/',views.checkout,name='checkout'),
     path('brand_orders/',views.brand_orders,name='brand_orders'),
     path('image_recognition/',views.image_recognition,name='image_recognition'),
+    path('product_result/',views.image_recognition,name='product_result'),
 
 ]
