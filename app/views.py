@@ -21,22 +21,24 @@ import numpy as np
 
 from PIL import Image
 def Index(request):
+
     products = Product.objects.all()                #retrive all products
+
     n=len(products)
     nslides = n//4 + ceil((n/4)-(n//4))
+
     productImages ={}
     for product in products:
         ProductImage = PImage.objects.filter(Product=product).values().first()
         productImages[product.id] = ProductImage
-    print("this is query set")
-    print(productImages)
+
     params={'no_of_slides':nslides, 'range':range(1, nslides), 'product':products,"PImage":productImages}
+
     return render(request, 'index.html',params)
 
 @register.filter
 def get_item(dictionary, key):
-    print("in get item")
-    print(dictionary[key]['Product_Image'])
+
     return dictionary[key]['Product_Image']
 
 def brand_register(request):
@@ -123,13 +125,13 @@ def product_add(request):
 
 
 def product_delete(request):
-    print("in delete")
+
     if request.method=='POST':
        data=json.load(request)
        Pid=data.get('product_id')
-       print(Pid)
+
        product_tobe_deleted = Product.objects.filter(id=Pid)
-       print(product_tobe_deleted)
+
        product_tobe_deleted.delete()
 
        return JsonResponse({'status':'Product Deleted'})
@@ -139,14 +141,9 @@ def product_to_update(request):
     if request.method=='POST':
         data = json.load(request)
         Pid = data.get('product_id')
-        print(Pid)
-        # product_tobe_update = Product.objects.filter(id=Pid)
-        # print(product_tobe_update)
-        # for product in product_tobe_update:
-        #  PUpdate = Product(Product_Name=product.Product_Name,Product_Price=product.Product_Price,Product_Category=product.Product_Category,Product_Description=product.Product_Description,Product_Stock=product.Product_Stock,Product_Brand=product.Product_Brand)
-        # print(PUpdate)
+
         data = serializers.serialize("json",Product.objects.filter(id=Pid))
-        print(data)
+
         return JsonResponse({'PUpdate':data,"Productid":Pid})
     return JsonResponse({'status':'Product to be update is not available'})
 
@@ -158,8 +155,7 @@ def product_update(request):
         Product_category = request.POST.get("Product_Category")
         Product_description = request.POST.get("Product_Description")
         Product_stock = request.POST.get("Product_Stock")
-        print("in update")
-        print(Pid)
+
 
         Product.objects.filter(id=Pid).update(Product_Name=Product_name,Product_Price=Product_price,Product_Category=Product_category,Product_Description=Product_description
                                               ,Product_Stock=Product_stock)
@@ -170,14 +166,14 @@ def get_single_product(request,slug):
     product = Product.objects.get(slug=slug)
     FImage = PImage.objects.filter(Product=product).first
     productsImages = PImage.objects.filter(Product=product)
-    print(productsImages)
+
     context = {'product': product, 'FeaturedImage': FImage, 'images': productsImages}
 
     return render(request, 'single_product.html', context=context)
 
 def add_to_cart(request):
     if request.method=='POST':
-        print("in add to cart")
+
         cart = Cart(request)
         pid = request.POST.get('productid')
         pquantity = request.POST.get('quantity')
@@ -253,7 +249,7 @@ def checkout(request):
 
         new_customer = Customer(name=name,email=email,phone=phone,address=address,city=city,state=state,zipcode=zip)
         new_customer.save()
-        print(new_customer)
+
         # get product present in current cart session
         product_in_cart_session = request.session[CART_SESSION_ID]
 
@@ -264,10 +260,10 @@ def checkout(request):
                 create_order_item = OrderItem(CustomerOrder=new_customer,ProductOrder=p,BrandOrder=p.Product_Brand,
                                               ItemPrice=p.Product_Price,ItemQuantity=p_quantity_cart)
                 create_order_item.save()
-                print(create_order_item)
+
             new_order = Order(OrderDetail=create_order_item)
             new_order.save()
-            print(new_order)
+
 
     return render(request,"checkout.html")
 
@@ -308,7 +304,7 @@ def brand_orders(request):
                                          )
 
             brand_orderd_products.append(orderedProduct)
-            print(brand_orderd_products)
+
 
     context={
         "orders":brand_orderd_products

@@ -3,6 +3,104 @@
 {% load static %}
 {% block main_content %}
 
+    <style>
+        .parallax h1 {
+            transition: 0.5s;
+            color:white !important;
+            font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+            z-index: 10;
+        }
+        .parallax {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+        }
+
+
+            .parallax img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                pointer-events: none;
+            }
+
+        /* @-webkit-keyframes Gradient {
+    0% {background-position: 0% 25%;}
+    25% {background-position: 0% 50%;}
+    50% {background-position: 75% 25%;}
+    75% {background-position: 100% 50%;}
+    100% {background-position: 0% 75%;}
+}
+@-moz-keyframes Gradient {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+} */
+        @keyframes Gradient {
+            0% {
+                background-position: 0% 25%;
+            }
+
+            25% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 75% 25%;
+            }
+
+            75% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 75%;
+            }
+        }
+
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: #555;
+            }
+        }
+
+        .typewrite {
+            padding-right: 15px;
+            border-right: 0.1em solid #777;
+            color: rgb(99, 97, 97);
+            font-size: 3rem;
+            animation: blink-caret .5s step-end infinite;
+            color:white !important;
+            font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+            z-index: 10;
+        }
+
+    </style>
+
+
+    <section class="parallax">
+        <img src="{% static '5.png' %}" id="cloth5">
+        <!-- <h2 id="text">PRIR</h2> -->
+        <img src="{% static '12.png' %}" id="cloth12">
+        <img src="{% static '21.png' %}" id="cloth21">
+        <h1 id="text1">
+            <a href="" class="typewrite" data-period="2000"
+               data-type='[ "Hi, We are PRIR.", "Just Snap What You Want ",
+            "We Find It For You."]'>
+                <span class="wrap"></span>
+            </a>
+        </h1>
+        <!-- <h4 id="text1">YOU SNAP WE FIND</h4> -->
+        <img src="{% static 'leaf.png' %}" id="leaf">
+    </section>
 
     <div class="category text-center container m-5">
         <h2>Out Categories</h2>
@@ -48,15 +146,15 @@
 								</div>
 								<div class="thumb-content">
 									<h4>{{ product.Product_Name }}</h4>
-{#									<div class="star-rating">#}
-{#										<ul class="list-inline">#}
-{#											<li class="list-inline-item"><i class="fa fa-star"></i></li>#}
-{#											<li class="list-inline-item"><i class="fa fa-star"></i></li>#}
-{#											<li class="list-inline-item"><i class="fa fa-star"></i></li>#}
-{#											<li class="list-inline-item"><i class="fa fa-star"></i></li>#}
-{#											<li class="list-inline-item"><i class="fa fa-star-o"></i></li>#}
-{#										</ul>#}
-{#									</div>#}
+									<div class="star-rating">
+										<ul class="list-inline">
+											<li class="list-inline-item"><i class="fa fa-star"></i></li>
+											<li class="list-inline-item"><i class="fa fa-star"></i></li>
+											<li class="list-inline-item"><i class="fa fa-star"></i></li>
+											<li class="list-inline-item"><i class="fa fa-star"></i></li>
+											<li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+										</ul>
+									</div>
 									<p class="item-price"><b>{{ product.Product_Price }} PKR</b></p>
 									<a href="{% url 'get_single_product' product.slug %}" class="btn btn-primary">Add to Cart</a>
 								</div>
@@ -132,4 +230,91 @@
 </div>
 
 {% endblock %}
+{% block myscripts %}
+
+    <script>
+        // let text  =document.getElementById('text');
+        let text1 = document.getElementById('text1');
+        let leaf = document.getElementById('leaf');
+        let cloth5 = document.getElementById('cloth5');
+        // let cloth2 =document.getElementById('cloth2');
+        // let cloth3 =document.getElementById('cloth3');
+        let cloth12 = document.getElementById('cloth12');
+        let cloth21 = document.getElementById('cloth21');
+        // let cloth123 =document.getElementById('cloth123');
+
+
+        window.addEventListener('scroll', () => {
+            let value = window.scrollY;
+
+            if (value > 400)
+                return;
+
+            // text.style.marginTop = value * 2.5 + 'px';
+            text1.style.marginTop = value * 3.5 + 'px';
+            leaf.style.top = value * -1.5 + 'px';
+            leaf.style.left = value * 1.5 + 'px';
+            cloth5.style.left = value * -1.5 + 'px';
+            cloth12.style.left = value * 1.5 + 'px';
+            cloth21.style.left = value * -2.5 + 'px';
+
+            if (value > 200)
+                text1.style.opacity = '0';
+            else
+                text1.style.opacity = '1';
+        });
+
+        var TxtType = function (el, toRotate, period) {
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+        };
+
+        TxtType.prototype.tick = function () {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+            var that = this;
+            var delta = 200 - Math.random() * 100;
+
+            if (this.isDeleting) { delta /= 2; }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+                this.isDeleting = false;
+                this.loopNum++;
+                delta = 500;
+            }
+
+            setTimeout(function () {
+                that.tick();
+            }, delta);
+        };
+
+        window.onload = function () {
+            var elements = document.getElementsByClassName('typewrite');
+            for (var i = 0; i < elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-type');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtType(elements[i], JSON.parse(toRotate), period);
+                }
+            }
+        };
+    </script>
+{% endblock myscripts %}
 
